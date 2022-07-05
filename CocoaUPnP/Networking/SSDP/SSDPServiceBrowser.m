@@ -59,9 +59,9 @@ typedef enum : NSUInteger {
         [self setupMulticastSocket];
     }
 
-    if (self.unicastSocket.isClosed) {
-        [self setupUnicastSocket];
-    }
+//    if (self.unicastSocket.isClosed) {
+//        [self setupUnicastSocket];
+//    }
 
     NSString *searchHeader;
     searchHeader = [self _prepareSearchRequestWithServiceType:serviceType];
@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
                             toHost:SSDPMulticastGroupAddress
                               port:SSDPMulticastUDPPort
                        withTimeout:-1
-                               tag:11];
+                               tag:0];
 }
 
 - (void)setupMulticastSocket
@@ -86,16 +86,28 @@ typedef enum : NSUInteger {
     if (!sourceAddress) {
         sourceAddress = [[interfaces allValues] firstObject];
     }
-
+//    if (![self.multicastSocket enableBroadcast:YES error:&err]) {
+//        [self _notifyDelegateWithError:err];
+//        return;
+//    }
+//
+//
+    
+    
     if (![self.multicastSocket enableReusePort:YES error:&err]) {
         [self _notifyDelegateWithError:err];
         return;
     }
 
-    if (![self.multicastSocket bindToAddress:sourceAddress error:&err]) {
+    if (![self.multicastSocket bindToPort:9860 error:&err]) {
         [self _notifyDelegateWithError:err];
         return;
     }
+    
+//    if (![self.multicastSocket bindToAddress:sourceAddress error:&err]) {
+//        [self _notifyDelegateWithError:err];
+//        return;
+//    }
 
     if (![self.multicastSocket joinMulticastGroup:SSDPMulticastGroupAddress error:&err]) {
         [self _notifyDelegateWithError:err];
